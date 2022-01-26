@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>page2</title>
+</head>
+<body>
+
+    <h1>page2</h1>
+    
+    <form th:action="@{/page2}" th:object="${form}" method="post">
+        
+        <input type="text" th:field="*{id}">
+        <input type="text" th:field="*{title}">
+        <input type="text" th:field="*{memo}">
+        <input type="text" th:field="*{created}">
+        <input type="text" th:field="*{updated}">
+
+    </form>
+
+</body>
+</html>
