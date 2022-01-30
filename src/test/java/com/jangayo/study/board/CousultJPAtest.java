@@ -1,11 +1,14 @@
 package com.jangayo.study.board;
 
-import org.junit.jupiter.api.Disabled;
+import java.util.Optional;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,36 +20,57 @@ public class CousultJPAtest {
     @Autowired
     private ConsultRepository consultRepository;
 
-    @DisplayName("생성일 자동 생성 테스트")
+    @DisplayName("create Time test")
     @Test
     void createTime() throws Exception {
 
         Consult consult = Consult.builder()
-                .userid("kang")
-                .consultTitle("help me")    
-                .consultText("please call me")
+                .userid("new")
+                .consultTitle("newConsult5")
+                .consultText("newConsultText")
                 .build();
 
         Consult newConsult = consultRepository.save(consult);
-
-        log.info("log :: " + newConsult);
-
     }
 
-    @DisplayName("수정일 자동 수정 테스트")
+    @DisplayName("update Time test")
     @Test
-    void updateTime() throws Exception {
+    @Transactional
+    @Rollback(false)
+    void updateTimetest() throws Exception{
+        
+        Optional<Consult> consult = consultRepository.findById(5l);
+        
+        Consult newConsult = Consult.builder()
+                .id(consult.get().getId())
+                .userid(consult.get().getUserid())
+                .consultTitle(consult.get().getConsultTitle())
+                .created(consult.get().getCreated())
+                .answerTitle("답변입니다.")
+                .answerText("답변내용")
+                .build();
 
-        Consult consult = new Consult();
+        consultRepository.save(newConsult);
+        
+    }
 
-        consult.setId(1l);
-        consult.setUserid("kang");
-        consult.setConsultTitle("title");
-        consult.setConsultText("Text");
 
-        Consult newConsult = consultRepository.save(consult);
+    @DisplayName("다이나믹 업데이트")
+    @Test
+    @Transactional
+    @Rollback(false)
+    void DynamicUpdate() throws Exception {
 
-        log.info("log :: " + newConsult);
+        Consult newConsult = Consult.builder()
+                .id(3l)
+                .userid("kkk")
+                .consultTitle("다이나믹안쓰는제목")
+                .answerTitle("답변제목입니다2.")
+                .answerText("답변텍스트입니다2")
+                .build();
+
+        consultRepository.save(newConsult);
+
 
     }
 

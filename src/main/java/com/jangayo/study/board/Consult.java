@@ -39,7 +39,7 @@ public class Consult {
     @Lob
     private String consultText;
 
-    // 딥변
+    // 답변
     @Column(length = 40)
     private String answerid;
 
