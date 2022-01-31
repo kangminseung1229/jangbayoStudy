@@ -74,4 +74,20 @@ public class CousultJPAtest {
 
     }
 
+    @DisplayName("test row 100개 삽입")
+    @Test
+    void testRow100() throws Exception{
+
+        Consult tempRow = Consult.builder()
+                    .userid("tempUser")
+                    .consultTitle("상담글입니다.")
+                    .build();
+
+                for(int i=1;i<100;i++){
+                    consultRepository.save(tempRow);
+                    tempRow.setId(null);
+                }
+
+    }
+
 }
