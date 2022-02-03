@@ -93,6 +93,8 @@ public class ConsultController {
             return "thymeleaf/consultDetail";
         }
 
+        
+
         Consult newConsult = new Consult();
 
         if (consultForm.getId().toString().isEmpty()) {
@@ -110,6 +112,8 @@ public class ConsultController {
                     .consultText(consultForm.getConsultText())
                     .build();
         }
+
+        consultRepository.save(newConsult);
 
         return "redirect:/consult/consult-detail?id=" + newConsult.getId();
 
