@@ -26,18 +26,57 @@ public class CosnultControllerTest {
     @Autowired
     private ConsultRepository consultRepository;
 
-    @DisplayName("상담글만 수정 - 정상")
+    @DisplayName("리팩토링 - 상담글 입력 - 정상")
     @Test
-    void consultUpdate_correct() throws Exception{
+    void consultInsert_correct_RE () throws Exception {
 
         mockMvc.perform(post("/consult/consult-detail")
-                .param("id", "202")
-                .param("userid", "tempUser")
-                .param("consultTitle", "수정된 상담 제목")
-                .param("consultText", "수정된 상담 글")
-            )
-            .andExpect(status().is3xxRedirection());
+                .param("userid", "mismismis")
+                .param("consultTitle", "리팩토링 제목입니다.")
+                .param("consultText", "리팩토링은 선택이 아닌 필수입니다!")
+                )
+                .andExpect(status().is3xxRedirection());
+    }
 
+    
+    @DisplayName("리팩토링 - 상담글 입력 - 오류")
+    @Test
+    void consultInsert_wrong_RE () throws Exception {
+
+        mockMvc.perform(post("/consult/consult-detail")
+                .param("userid", "sdssdssds") 
+                .param("consultTitle", "") //title 공백
+                .param("consultText", "testText")
+                )
+                .andExpect(status().isOk());
+    }
+
+
+    @DisplayName("리팩토링 - 상담글 수정 - 정상")
+    @Test
+    void consultUpdate_corrent_RE () throws Exception{
+        mockMvc.perform(post("/consult/consult-detail")
+                        .param("id", "209")
+                        .param("userid", "kangminseung")
+                        .param("consultTitle", "리팩토링 수정된 제목입니다.")
+                        .param("consultText", "리팩토링 과정이 어떻게 되나요?")
+                        )
+                        .andExpect(status().is3xxRedirection());
+    }
+
+
+    
+    @DisplayName("리팩토링 - 상담글 수정 - 오류")
+    @Test
+    void consultUpdate_wrong_RE () throws Exception{
+
+        mockMvc.perform(post("/consult/consult-detail")
+                        .param("id", "209")
+                        .param("userid", "kangminseung")
+                        .param("consultTitle", "")
+                        .param("consultText", "")
+                        )
+                        .andExpect(status().isOk());
     }
 
 

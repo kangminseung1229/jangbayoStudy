@@ -27,6 +27,7 @@ public class ConsultController {
 
     private final ConsultRepository consultRepository;
     private final ConsultFormValidator consultFormValidator;
+    private final ConsultService consultService;
 
     // 커스텀 validator
     @InitBinder("consultForm")
@@ -59,26 +60,9 @@ public class ConsultController {
     @GetMapping("consult-detail")
     public String detail(Model model, @RequestParam(required = false) Long id) {
 
-        if (id != null) {
-
-            Optional<Consult> consult = consultRepository.findById(id);
-
-            if (consult.isPresent()) {
-
-                ConsultForm consultForm = ConsultForm.builder()
-                        .userid(consult.get().getUserid())
-                        .id(consult.get().getId())
-                        .consultTitle(consult.get().getConsultTitle())
-                        .consultText(consult.get().getConsultText())
-                        .build();
-
-                model.addAttribute("consultForm", consultForm);
-            }
-        } else {
-            model.addAttribute("consultForm", new ConsultForm());
-        }
-
+        consultService.detailProcess(model, id);
         model.addAttribute("title", "상담글");
+
         return "thymeleaf/consultDetail";
     }
 
@@ -87,34 +71,12 @@ public class ConsultController {
     public String detailPost(@Valid ConsultForm consultForm, Errors errors, Model model) {
 
         // valid 어노테이션으로 validation check를 진행한다.
-
         // error 가 존재한다면
         if (errors.hasErrors()) {
             return "thymeleaf/consultDetail";
         }
 
-        
-
-        Consult newConsult = new Consult();
-
-        if (consultForm.getId().toString().isEmpty()) {
-            newConsult = Consult.builder()
-                    .id(null)
-                    .userid(consultForm.getUserid())
-                    .consultTitle(consultForm.getConsultTitle())
-                    .consultText(consultForm.getConsultText())
-                    .build();
-        } else {
-            newConsult = Consult.builder()
-                    .id(consultForm.getId())
-                    .userid(consultForm.getUserid())
-                    .consultTitle(consultForm.getConsultTitle())
-                    .consultText(consultForm.getConsultText())
-                    .build();
-        }
-
-        consultRepository.save(newConsult);
-
+        Consult newConsult = consultService.updateProcess(consultForm);
         return "redirect:/consult/consult-detail?id=" + newConsult.getId();
 
     }
