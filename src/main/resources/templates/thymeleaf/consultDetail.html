@@ -13,29 +13,29 @@
 
     <div class="container">
 
-        <form action="" th:object="${consult}" class="needs-validation" method="post">
+        <form action="" th:object="${consultForm}" class="needs-validation" method="post">
             <input class="form-control"  type="hidden" th:field="*{id}">
-            
-            
             <hr class="my-4">
             <h4 class="mb-5">상담글</h4>
             <div class="row mb-3">
-                작성일 : <span th:text="${#temporals.format(consult.created,'yyyy-MM-dd')}"></span>
-                작성자 : <span th:text="${consult.userid}"></span>
+                <!-- 작성일 : <span th:text="${#temporals.format(consult.created,'yyyy-MM-dd')}"></span> -->
+                작성자 : <span th:text="${consultForm.userid}"></span>
             </div>
             <hr class="my-4">
             
             <div class="row mb-3">
                 <label for="consultTitle" class="form-label">상담 제목</label>
                 <input class="form-control"  type="text" name="" id="" th:field="*{consultTitle}">
-
+                <small class="form-text text-danger" th:if="${#fields.hasErrors('consultTitle')}" th:errors="*{consultTitle}">Title error</small>
+                
                 <label for="consultTitle" class="form-label">작성자</label>
                 <input class="form-control"  type="text" name="" id="" th:field="*{userid}">
             </div>
-
+            
             <div class="row mb-3">
                 <label for="consultText" class="form-label">상담 내용</label>
                 <textarea th:field="*{consultText}" class="form-control" rows="10"></textarea>
+                <small class="form-text text-danger" th:if="${#fields.hasErrors('consultText')}" th:errors="*{consultText}">Text error</small>
             </div>
 
             <div class="col-12">

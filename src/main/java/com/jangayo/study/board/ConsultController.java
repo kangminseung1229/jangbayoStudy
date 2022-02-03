@@ -2,15 +2,21 @@ package com.jangayo.study.board;
 
 import java.util.Optional;
 
+import javax.validation.Valid;
+
+import org.aspectj.weaver.NewConstructorTypeMunger;
+import org.springframework.boot.autoconfigure.info.ProjectInfoProperties.Build;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.jsf.FacesContextUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,6 +26,14 @@ import lombok.RequiredArgsConstructor;
 public class ConsultController {
 
     private final ConsultRepository consultRepository;
+    private final ConsultFormValidator consultFormValidator;
+
+    // 커스텀 validator
+    @InitBinder("consultForm")
+    public void InitBinder(WebDataBinder webDataBinder) {
+        System.out.println("바인딩되었습니다.");
+        webDataBinder.addValidators(consultFormValidator);
+    }
 
     @GetMapping("consult-list")
     public String list(Model model, @PageableDefault(size = 20) org.springframework.data.domain.Pageable pageable,
@@ -39,38 +53,65 @@ public class ConsultController {
 
         model.addAttribute("title", "상담리스트");
 
-        return "thymeleaf/consultList"; 
+        return "thymeleaf/consultList";
     }
 
     @GetMapping("consult-detail")
-    public String detail(Model model, @RequestParam(required = false) Long id){
+    public String detail(Model model, @RequestParam(required = false) Long id) {
 
         if (id != null) {
 
             Optional<Consult> consult = consultRepository.findById(id);
 
             if (consult.isPresent()) {
-                model.addAttribute("consult", consult.get());
-            }
-        } else { 
-            model.addAttribute("consult", new Consult());
-        }
 
+                ConsultForm consultForm = ConsultForm.builder()
+                        .userid(consult.get().getUserid())
+                        .id(consult.get().getId())
+                        .consultTitle(consult.get().getConsultTitle())
+                        .consultText(consult.get().getConsultText())
+                        .build();
+
+                model.addAttribute("consultForm", consultForm);
+            }
+        } else {
+            model.addAttribute("consultForm", new ConsultForm());
+        }
 
         model.addAttribute("title", "상담글");
         return "thymeleaf/consultDetail";
     }
 
+    // 상담글 작성 및 수정
     @PostMapping("consult-detail")
-    public String detailPost(Consult consult, Model model){
+    public String detailPost(@Valid ConsultForm consultForm, Errors errors, Model model) {
 
-        System.out.println("detail ::" + consult);
-        consult.setCreated(consultRepository.findById(consult.getId()).get().getCreated());
-        Consult updatedConsult = consultRepository.save(consult);
+        // valid 어노테이션으로 validation check를 진행한다.
 
-        model.addAttribute("consult", updatedConsult);
+        // error 가 존재한다면
+        if (errors.hasErrors()) {
+            return "thymeleaf/consultDetail";
+        }
 
-        return "redirect:/consult/consult-detail";
+        Consult newConsult = new Consult();
+
+        if (consultForm.getId().toString().isEmpty()) {
+            newConsult = Consult.builder()
+                    .id(null)
+                    .userid(consultForm.getUserid())
+                    .consultTitle(consultForm.getConsultTitle())
+                    .consultText(consultForm.getConsultText())
+                    .build();
+        } else {
+            newConsult = Consult.builder()
+                    .id(consultForm.getId())
+                    .userid(consultForm.getUserid())
+                    .consultTitle(consultForm.getConsultTitle())
+                    .consultText(consultForm.getConsultText())
+                    .build();
+        }
+
+        return "redirect:/consult/consult-detail?id=" + newConsult.getId();
 
     }
 
