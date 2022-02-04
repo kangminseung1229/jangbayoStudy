@@ -8,38 +8,53 @@
     <title th:text="${title}">Document</title>
 </head>
 
+<header th:replace="fragments/cm_top.html :: head('상담')"></header>
+
 <body>
 
-    <!-- 검색 영역 -->
-    <div>
-        <form method="get">
-            <input type="text" name="searchString" id="">
-            <input type="submit" value="검색">
-        </form>
-    </div>
+    <div class="container">
 
-    <div>
+        <!-- 검색 영역 -->
         <div>
-            총 건수 : <span th:text="${list.TotalElements}">15</span>
+            <form method="get">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control"  aria-label="검색" name="searchString" th:placeholder="${searchString}"
+                        aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="submit">검색</button>
+                    </div>
+                </div>
+            </form>
         </div>
 
-        <span th:if="${list.TotalElements < 1 }">데이터가 없습니다.</span>
+        <div>
+            <div>
+                총 건수 : <span th:text="${list.TotalElements}">15</span>
+            </div>
 
-        <table th:if="${list.TotalElements > 0 }">
-            <tr>
-                <th>번호</th>
-                <th>아이디</th>
-                <th>상담제목</th>
-                <th>상담일</th>
-                <th>답변일</th>
-            </tr>
+            <span th:if="${list.TotalElements < 1 }">데이터가 없습니다.</span>
 
-            <tr th:each=" row : ${list}" th:onclick="'javascript: detail('+ ${row.id}+')'">
-                <td th:text="${row.id}">번호</td>
-                <td th:text="${row.userid}">아이디</td>
-                <td th:text="${row.consultTitle}"> 상담제목</td>
-                <td th:text="${#temporals.format(row.created,'yyyy-MM-dd')}">상담일</td>
-                <td th:text="${#temporals.format(row.answerTime,'yyyy-MM-dd')}">답변일</td>
+            <table th:if="${list.TotalElements > 0 }" class="table table-hover">
+
+                <thead class="thead-dark">
+                    <tr>
+                        <th>번호</th>
+                        <th>아이디</th>
+                        <th>상담제목</th>
+                        <th>상담일</th>
+                        <th>답변일</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr th:each=" row : ${list}" th:onclick="'javascript: detail('+ ${row.id}+')'">
+                        <td th:text="${row.id}">번호</td>
+                        <td th:text="${row.userid}">아이디</td>
+                        <td th:text="${row.consultTitle}"> 상담제목</td>
+                        <td th:text="${#temporals.format(row.created,'yyyy-MM-dd')}">상담일</td>
+                        <td th:text="${#temporals.format(row.answerTime,'yyyy-MM-dd')}">답변일</td>
+                </tbody>
             </tr>
         </table>
     </div>
@@ -68,9 +83,8 @@
 
           
         </ul>
-        <div class="Right">
-          <a type="button" class="btn btn-success" th:href="@{/consult/consult-detail}">쓰기</a>
-        </div>
+    </div>
+        <a type="button" class="btn btn-success float-right" th:href="@{/consult/consult-detail}">쓰기</a>
         
     
 </body>

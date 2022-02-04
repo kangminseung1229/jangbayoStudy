@@ -4,9 +4,8 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import org.aspectj.weaver.NewConstructorTypeMunger;
-import org.springframework.boot.autoconfigure.info.ProjectInfoProperties.Build;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,16 +27,21 @@ public class ConsultController {
     private final ConsultRepository consultRepository;
     private final ConsultFormValidator consultFormValidator;
     private final ConsultService consultService;
+    private final ConsultAnswerFormValidator  consultAnswerFormValidator;
 
     // 커스텀 validator
     @InitBinder("consultForm")
     public void InitBinder(WebDataBinder webDataBinder) {
-        System.out.println("바인딩되었습니다.");
         webDataBinder.addValidators(consultFormValidator);
     }
 
+    @InitBinder("answerForm")
+    public void InitBinderAnswer(WebDataBinder webDataBinder) {
+        webDataBinder.addValidators(consultAnswerFormValidator);
+    }
+
     @GetMapping("consult-list")
-    public String list(Model model, @PageableDefault(size = 20) org.springframework.data.domain.Pageable pageable,
+    public String list(Model model, @PageableDefault(size = 20) Pageable pageable,
             @RequestParam(required = false, defaultValue = "") String searchString) {
 
         Page<Consult> consultPagingList = consultRepository
@@ -52,6 +56,7 @@ public class ConsultController {
         model.addAttribute("endPage", endPage);
         model.addAttribute("list", consultPagingList);
 
+        model.addAttribute("searchString", searchString);
         model.addAttribute("title", "상담리스트");
 
         return "thymeleaf/consultList";
@@ -79,6 +84,29 @@ public class ConsultController {
         Consult newConsult = consultService.updateProcess(consultForm);
         return "redirect:/consult/consult-detail?id=" + newConsult.getId();
 
+    }
+
+    //답변글 화면
+    @GetMapping("consult-answer")
+    public String consultAnswerDetail( Model model, @RequestParam Long id){
+
+        Optional<Consult> consult = consultRepository.findById(id);
+
+        if (consult.isPresent()) {
+            Consult detailConsult = consult.get();
+            model.addAttribute("consult", detailConsult);
+            model.addAttribute("answerForm", new ConsultAnswerForm());
+            return "thymeleaf/consultAnswerDetail";
+        } else{
+            return "redirect:/consult/consult-detail?id="+id+"&error";
+        }
+ 
+    }
+
+    //답변내용 저장
+    @PostMapping("consult-answer")
+    public String consultAnswerDetailPost(){
+        
     }
 
 }

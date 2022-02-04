@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,12 +10,12 @@
 
 
 <header th:replace="fragments/cm_top.html :: head('상담')"></header>
+
 <body>
 
     <div class="container">
-
         <form action="" th:object="${consultForm}" class="needs-validation" method="post">
-            <input class="form-control"  type="hidden" th:field="*{id}">
+            <input class="form-control" type="hidden" th:field="*{id}">
             <hr class="my-4">
             <h4 class="mb-5">상담글</h4>
             <div class="row mb-3">
@@ -22,10 +23,10 @@
                 작성자 : <span th:text="${consultForm.userid}"></span>
             </div>
             <hr class="my-4">
-            
+
             <div class="row mb-3">
                 <label for="consultTitle" class="form-label">상담 제목</label>
-                <input class="form-control"  type="text" name="" id="" th:field="*{consultTitle}">
+                <input class="form-control" type="text" name="" id="" th:field="*{consultTitle}">
                 <small class="form-text text-danger" th:if="${#fields.hasErrors('consultTitle')}" th:errors="*{consultTitle}">Title error</small>
                 
                 <label for="consultTitle" class="form-label">작성자</label>
@@ -39,12 +40,30 @@
             </div>
 
             <div class="col-12">
-                <button class="btn btn-primary" type="submit">작성</button>
-                <button class="btn btn-danger" type="button" onclick="href='/consult/consult-list'">취소</button>
-             </div>
+                    <button class="btn btn-success btn-lg btn-block" type="button" onclick="answer();">답변</button>
+                    <button class="btn btn-primary btn-lg btn-block" type="submit">작성</button>
+                    <button class="btn btn-danger btn-lg btn-block" type="button" onclick="href='/consult/consult-list'">취소</button>
+            </div>
+
+            
         </form>
 
     </div>
+
+
+    <footer th:replace="fragments/cm_bottom.html :: foot()"></footer>
     
 </body>
 </html>
+
+<script>
+    
+    function answer() {
+
+        if (confirm("답변을 작성하시겠습니까?")) {
+            location.href="/consult/consult-answer?id="+$("#id").val();
+        }
+
+    }     
+    
+</script>
