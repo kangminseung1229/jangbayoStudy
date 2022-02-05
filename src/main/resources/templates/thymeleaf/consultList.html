@@ -34,6 +34,8 @@
                 <th>답변일</th>
             </tr>
 
+
+
             <tr th:each=" row : ${list}" th:onclick="'javascript: detail('+ ${row.id}+')'">
                 <td th:text="${row.id}">번호</td>
                 <td th:text="${row.userid}">아이디</td>

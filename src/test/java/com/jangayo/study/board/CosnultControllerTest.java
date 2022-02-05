@@ -31,9 +31,9 @@ public class CosnultControllerTest {
     void consultInsert_correct_RE () throws Exception {
 
         mockMvc.perform(post("/consult/consult-detail")
-                .param("userid", "mismismis")
-                .param("consultTitle", "리팩토링 제목입니다.")
-                .param("consultText", "리팩토링은 선택이 아닌 필수입니다!")
+                        .param("userid", "jangbayo")
+                        .param("consultTitle", "장바요 프로젝트입니다.")
+                        .param("consultText", "화이팅.")
                 )
                 .andExpect(status().is3xxRedirection());
     }

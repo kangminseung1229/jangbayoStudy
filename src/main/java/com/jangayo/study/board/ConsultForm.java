@@ -30,7 +30,7 @@ public class ConsultForm {
 
 
     @NotBlank
-    @Length(min = 10)
+    @Length(min = 10, max= 3000)
     private String consultText;
 
     

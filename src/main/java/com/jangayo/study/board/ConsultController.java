@@ -32,7 +32,6 @@ public class ConsultController {
     // 커스텀 validator
     @InitBinder("consultForm")
     public void InitBinder(WebDataBinder webDataBinder) {
-        System.out.println("바인딩되었습니다.");
         webDataBinder.addValidators(consultFormValidator);
     }
 
