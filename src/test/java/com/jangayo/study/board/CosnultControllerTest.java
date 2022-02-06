@@ -16,6 +16,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.time.LocalDateTime;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 public class CosnultControllerTest {
@@ -80,5 +82,29 @@ public class CosnultControllerTest {
     }
 
 
+    @DisplayName("답변글 작성 페이지 진입")
+    @Test
+    void consultAnswer_Page() throws Exception{
+
+        mockMvc.perform(get("/consult/consult-answer")
+                    .param("id", "213")                
+                        )
+                    .andExpect(status().isOk());
+    }
+
+    @DisplayName("답변글 작성 - 오류")
+    @Test
+    void consultAnswer_wrong() throws Exception{
+
+        mockMvc.perform(post("/consult/consult-answer")
+                    .param("id", "213")
+                    .param("answerTitle","")
+                    .param("answerText","우리는스프링부트입니다.")
+                    .param("answerTime", LocalDateTime.now().toString())
+        )
+                .andExpect(status().isOk());
+                    
+                    
+    }
     
 }

@@ -1,12 +1,15 @@
 package com.jangayo.study.board;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 import javax.validation.Valid;
 
-import org.aspectj.weaver.NewConstructorTypeMunger;
-import org.springframework.boot.autoconfigure.info.ProjectInfoProperties.Build;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,15 +31,23 @@ public class ConsultController {
     private final ConsultRepository consultRepository;
     private final ConsultFormValidator consultFormValidator;
     private final ConsultService consultService;
+    private final ConsultAnswerFormValidator  consultAnswerFormValidator;
 
     // 커스텀 validator
     @InitBinder("consultForm")
     public void InitBinder(WebDataBinder webDataBinder) {
+        System.out.println("질문 바인딩");
         webDataBinder.addValidators(consultFormValidator);
     }
 
+    @InitBinder("answerForm")
+    public void InitBinderAnswer(WebDataBinder webDataBinder) {
+        System.out.println("답변 바인딩");
+        webDataBinder.addValidators(consultAnswerFormValidator);
+    }
+
     @GetMapping("consult-list")
-    public String list(Model model, @PageableDefault(size = 20) org.springframework.data.domain.Pageable pageable,
+    public String list(Model model, @PageableDefault(size = 20) Pageable pageable,
             @RequestParam(required = false, defaultValue = "") String searchString) {
 
         Page<Consult> consultPagingList = consultRepository
@@ -51,6 +62,7 @@ public class ConsultController {
         model.addAttribute("endPage", endPage);
         model.addAttribute("list", consultPagingList);
 
+        model.addAttribute("searchString", searchString);
         model.addAttribute("title", "상담리스트");
 
         return "thymeleaf/consultList";
@@ -80,4 +92,59 @@ public class ConsultController {
 
     }
 
+    //답변글 화면
+    @GetMapping("consult-answer")
+    public String consultAnswerDetail( Model model, @RequestParam Long id){
+
+        Optional<Consult> consult = consultRepository.findById(id);
+
+        if (consult.isPresent()) {
+            Consult detailConsult = consult.get();
+
+            ConsultAnswerForm answerForm = ConsultAnswerForm.builder()
+                                        .id(detailConsult.getId())
+                                        .answerTitle(detailConsult.getAnswerTitle())
+                                        .answerText(detailConsult.getAnswerText())
+                                        .build();
+            model.addAttribute("consult", detailConsult);
+            model.addAttribute("answerForm", answerForm);
+            return "thymeleaf/consultAnswerDetail";
+        } else{
+            return "redirect:/consult/consult-detail?id="+id+"&error";
+        }
+ 
+    }
+
+    //답변내용 저장
+    @PostMapping("consult-answer")
+    public String consultAnswerDetailPost(@Valid ConsultAnswerForm answerForm, Errors errors, Model model){
+
+        System.out.println("답변폼:: " + answerForm);
+        if (errors.hasErrors()) {
+            // Optional<Consult> consult = consultRepository.findById(answerForm.getId());
+            // consult.ifPresent(target ->{
+            //     model.addAttribute("consult", target);
+            // });
+            return "thymeleaf/consultAnswerDetail";
+        } 
+
+        Optional<Consult> updateConsult = consultRepository.findById(answerForm.getId());
+
+        updateConsult.ifPresent(consult ->{
+            Consult newConsult = consult;
+            newConsult.builder()
+                    .id(answerForm.getId())
+                    .answerTitle(answerForm.getAnswerTitle())
+                    .answerText(answerForm.getAnswerText())
+                    .answerTime(LocalDateTime.now())
+                    .build();
+
+            model.addAttribute("answerForm", answerForm);
+        });
+
+        return "redirect:/consult/consult-answer?id="+answerForm.getId();
+
+        
+    }
+    
 }

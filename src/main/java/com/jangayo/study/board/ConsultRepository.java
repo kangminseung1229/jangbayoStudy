@@ -9,6 +9,5 @@ public interface ConsultRepository extends JpaRepository<Consult, Long>{
 
     Page<Consult> findByUseridContainingOrConsultTitleContainingOrderByIdDesc(String searchString, String searchString2,
             Pageable pageable);
-
     
 }
