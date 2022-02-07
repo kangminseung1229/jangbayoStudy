@@ -15,7 +15,7 @@
 
     <div class="container">
 
-        <!-- <div class="bg-light p-5 rounded">
+        <div class="bg-light p-5 rounded">
             <h1>상담 제목</h1>
             <p class="lead" th:text="${consult.consultTitle}">This example is a quick exercise to illustrate how fixed to top navbar works. As you scroll,
                 it will remain fixed to the top of your browser’s viewport.</p>
@@ -24,9 +24,9 @@
             <p class="lead" th:text="${consult.consultText}"></p>
             
         </div>    
-         -->
         
-             <form class="needs-validation" th:action="@{/consult/consult-answer}" method="post" th:object="${answerForm}">
+        
+             <form class="needs-validation" th:action="@{/consult/consult-answer}" method="post" th:object="${consultAnswerForm}">
                 
                 <input type="hidden" name="" th:field="*{id}">
                 <hr class="my-4">
@@ -45,7 +45,7 @@
         
                 <div class="col-12">
                         <button class="btn btn-success btn-lg btn-block" type="submit" >답변하기</button>
-                        <button class="btn btn-danger btn-lg btn-block" type="button" onclick="href='/answer/answer-list'">취소</button>
+                        <button class="btn btn-danger btn-lg btn-block" type="button" onclick="location.href='/consult/consult-list';">취소</button>
                 </div>
         
         

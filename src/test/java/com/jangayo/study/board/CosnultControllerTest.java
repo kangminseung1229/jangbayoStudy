@@ -1,25 +1,23 @@
 package com.jangayo.study.board;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
-
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.then;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.time.LocalDateTime;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 public class CosnultControllerTest {
 
     @Autowired
@@ -103,8 +101,20 @@ public class CosnultControllerTest {
                     .param("answerTime", LocalDateTime.now().toString())
         )
                 .andExpect(status().isOk());
-                    
-                    
+    }
+
+    @DisplayName("답변글 작성 - 정상")
+    @Test
+    void consultAnswer_correct() throws Exception{
+        
+        mockMvc.perform(post("/consult/consult-answer")
+                    .param("id", "209")
+                    .param("answerTitle","답변드립니다.")
+                    .param("answerText","테스트 답변 글 작성 시 rollback")
+                    .param("answerTime", LocalDateTime.now().toString())
+        )
+                .andExpect(status().is3xxRedirection());
+        
     }
     
 }
