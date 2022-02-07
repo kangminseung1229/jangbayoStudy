@@ -31,7 +31,7 @@ public class ConsultController {
     private final ConsultRepository consultRepository;
     private final ConsultFormValidator consultFormValidator;
     private final ConsultService consultService;
-    private final ConsultAnswerFormValidator  consultAnswerFormValidator;
+    private final ConsultAnswerFormValidator consultAnswerFormValidator;
 
     // 커스텀 validator
     @InitBinder("consultForm")
@@ -92,62 +92,41 @@ public class ConsultController {
 
     }
 
-    //답변글 화면
+    // 답변글 화면
     @GetMapping("consult-answer")
-    public String consultAnswerDetail( Model model, @RequestParam Long id){
+    public String consultAnswerDetail(Model model, @RequestParam Long id) {
 
         Optional<Consult> consult = consultRepository.findById(id);
 
         if (consult.isPresent()) {
-            Consult detailConsult = consult.get();
-
-            ConsultAnswerForm consultAnswerForm = ConsultAnswerForm.builder()
-                                        .id(detailConsult.getId())
-                                        .answerTitle(detailConsult.getAnswerTitle())
-                                        .answerText(detailConsult.getAnswerText())
-                                        .build();
-            model.addAttribute("consult", detailConsult);
-            model.addAttribute("consultAnswerForm", consultAnswerForm);
+            consultService.answerProcess(model, consult);
             return "thymeleaf/consultAnswerDetail";
-        } else{
-            return "redirect:/consult/consult-detail?id="+id+"&error";
+        } else {
+            return "redirect:/consult/consult-detail?id=" + id + "&error";
         }
- 
+
     }
 
-    //답변내용 저장
+    // 답변내용 저장
     @PostMapping("consult-answer")
-    public String consultAnswerDetailPost(@Valid ConsultAnswerForm consultAnswerForm, Errors errors, Model model){
+    public String consultAnswerDetailPost(@Valid ConsultAnswerForm consultAnswerForm, Errors errors, Model model) {
 
         if (errors.hasErrors()) {
             Optional<Consult> consult = consultRepository.findById(consultAnswerForm.getId());
-            consult.ifPresent(target ->{
+            consult.ifPresent(target -> {
                 model.addAttribute("consult", target);
             });
             return "thymeleaf/consultAnswerDetail";
-        } 
+        }
 
-        
-        Optional<Consult> updateConsult = consultRepository.findById(consultAnswerForm.getId()); //update 할 대상
+        Optional<Consult> updateConsult = consultRepository.findById(consultAnswerForm.getId()); // update 할 대상
 
-        updateConsult.ifPresent(consult ->{
-
-            
-            Consult newConsult = consult;
-            
-            newConsult.setAnswerTitle(consultAnswerForm.getAnswerTitle());
-            newConsult.setAnswerText(consultAnswerForm.getAnswerText());
-            newConsult.setAnswerTime(LocalDateTime.now());
-            
-            newConsult = consultRepository.save(newConsult);
-            
-            model.addAttribute("consult", newConsult);
-            model.addAttribute("consultAnswerForm", consultAnswerForm);
+        updateConsult.ifPresent(consult -> {
+            consultService.updateProcess(consultAnswerForm, model, consult);
         });
 
-        return "redirect:/consult/consult-answer?id="+consultAnswerForm.getId();
+        return "redirect:/consult/consult-answer?id=" + consultAnswerForm.getId();
 
-        
     }
-    
+
 }

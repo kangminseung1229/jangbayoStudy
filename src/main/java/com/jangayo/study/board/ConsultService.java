@@ -1,5 +1,6 @@
 package com.jangayo.study.board;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -11,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ConsultService {
 
-    
     private final ConsultRepository consultRepository;
 
     public void detailProcess(Model model, Long id) {
@@ -35,7 +35,6 @@ public class ConsultService {
         }
     }
 
-
     public Consult updateProcess(ConsultForm consultForm) {
         Consult newConsult;
         if (consultForm.getId() == null) {
@@ -58,5 +57,29 @@ public class ConsultService {
         return newConsult;
     }
 
-    
+    public void answerProcess(Model model, Optional<Consult> consult) {
+        Consult detailConsult = consult.get();
+
+        ConsultAnswerForm consultAnswerForm = ConsultAnswerForm.builder()
+                .id(detailConsult.getId())
+                .answerTitle(detailConsult.getAnswerTitle())
+                .answerText(detailConsult.getAnswerText())
+                .build();
+        model.addAttribute("consult", detailConsult);
+        model.addAttribute("consultAnswerForm", consultAnswerForm);
+    }
+
+    public void updateProcess(ConsultAnswerForm consultAnswerForm, Model model, Consult consult) {
+        Consult newConsult = consult;
+
+        newConsult.setAnswerTitle(consultAnswerForm.getAnswerTitle());
+        newConsult.setAnswerText(consultAnswerForm.getAnswerText());
+        newConsult.setAnswerTime(LocalDateTime.now());
+
+        newConsult = consultRepository.save(newConsult);
+
+        model.addAttribute("consult", newConsult);
+        model.addAttribute("consultAnswerForm", consultAnswerForm);
+    }
+
 }

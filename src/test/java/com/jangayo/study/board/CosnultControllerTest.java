@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.FlashAttributeResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -101,14 +102,17 @@ public class CosnultControllerTest {
                     .param("answerTime", LocalDateTime.now().toString())
         )
                 .andExpect(status().isOk());
+
+
     }
 
     @DisplayName("답변글 작성 - 정상")
     @Test
+    @Rollback(false)
     void consultAnswer_correct() throws Exception{
         
         mockMvc.perform(post("/consult/consult-answer")
-                    .param("id", "209")
+                    .param("id", "107")
                     .param("answerTitle","답변드립니다.")
                     .param("answerText","테스트 답변 글 작성 시 rollback")
                     .param("answerTime", LocalDateTime.now().toString())
