@@ -57,4 +57,7 @@ public class Consult {
 
     private LocalDateTime answerTime;
 
+    private String test1;
+    private String test2;
+
 }
