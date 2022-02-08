@@ -84,6 +84,8 @@ public class ConsultController {
         // valid 어노테이션으로 validation check를 진행한다.
         // error 가 존재한다면
         if (errors.hasErrors()) {
+            System.out.println("에러 발생 :: " + errors.getFieldErrors());
+        
             return "thymeleaf/consultDetail";
         }
 
