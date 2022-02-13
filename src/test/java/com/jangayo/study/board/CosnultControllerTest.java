@@ -34,7 +34,7 @@ public class CosnultControllerTest {
         mockMvc.perform(post("/consult/consult-detail")
                         .param("userid", "jangbayo")
                         .param("consultTitle", "장바요 프로젝트입니다.")
-                        .param("consultText", "화이팅.")
+                        .param("consultText", "우리는 할수 있습니다. 하하")
                 )
                 .andExpect(status().is3xxRedirection());
     }
