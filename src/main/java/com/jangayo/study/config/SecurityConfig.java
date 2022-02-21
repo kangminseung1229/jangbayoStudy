@@ -6,15 +6,24 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 @Configuration
-@EnableWebSecurity()
+@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-            .mvcMatchers("/security/test1").permitAll()
+            .mvcMatchers("/","/login","/account/sign-up").permitAll()
             .anyRequest().authenticated();
+
+        // form login
+        http.formLogin()
+            .loginPage("/login").permitAll();
+
+        // form logout
+        http.logout()
+            .logoutSuccessUrl("/");
+
     }
 
     @Override
