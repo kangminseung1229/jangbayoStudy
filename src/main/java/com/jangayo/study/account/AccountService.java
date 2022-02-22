@@ -1,5 +1,6 @@
 package com.jangayo.study.account;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -48,7 +49,13 @@ public class AccountService implements UserDetailsService{
             throw new UsernameNotFoundException(username);
         }
 
-        return new UserAccount(account);
+        List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
+        account.getRoles().forEach(e -> {
+            authorities.add(new SimpleGrantedAuthority(e.getRole()));
+        });
+
+
+        return new UserAccount(account,authorities);
     }
 
     //로그인 

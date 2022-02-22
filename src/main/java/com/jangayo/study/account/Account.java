@@ -1,12 +1,18 @@
 package com.jangayo.study.account;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,6 +46,15 @@ public class Account {
     private LocalDateTime emailCheckTokenGeneratedAt;
 
     private LocalDateTime joinedAt;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name="Authority",
+        joinColumns =  @JoinColumn(name="accountId"),
+        inverseJoinColumns = @JoinColumn(name="roleId")
+    )
+    List<AccountRole> roles = new ArrayList<>();
+    
 
     public void generateEmailCheckToken() { // RANDOM TOKEN 생성
         this.emailCheckToken = UUID.randomUUID().toString();
