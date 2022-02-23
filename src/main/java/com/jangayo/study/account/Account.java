@@ -49,7 +49,7 @@ public class Account {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-        name="Authority",
+        name="authority",
         joinColumns =  @JoinColumn(name="accountId"),
         inverseJoinColumns = @JoinColumn(name="roleId")
     )
