@@ -13,7 +13,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.FlashAttributeResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -34,7 +33,7 @@ public class CosnultControllerTest {
         mockMvc.perform(post("/consult/consult-detail")
                         .param("userid", "jangbayo")
                         .param("consultTitle", "장바요 프로젝트입니다.")
-                        .param("consultText", "화이팅.")
+                        .param("consultText", "우리는 할수 있습니다. 하하")
                 )
                 .andExpect(status().is3xxRedirection());
     }
