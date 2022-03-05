@@ -1,6 +1,7 @@
 package com.jangayo.study.account;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -81,5 +82,13 @@ public class AccountService implements UserDetailsService {
         SecurityContext context = SecurityContextHolder.getContext();
         context.setAuthentication(token);
     }
+
+    public Account principalUpdate(List<Long> authorities, String nickname) {
+        List<AccountRole> accountRoles = accountRoleRepository.findByIdIn(authorities);
+        Account user = accountRepository.findByNickname(nickname);
+        user.setRoles(accountRoles);
+        return accountRepository.save(user);
+    }
+
 
 }

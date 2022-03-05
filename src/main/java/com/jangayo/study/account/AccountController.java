@@ -1,12 +1,19 @@
 package com.jangayo.study.account;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,7 +23,8 @@ import lombok.RequiredArgsConstructor;
 public class AccountController {
 
     private final AccountService accountService;
-    private final AccountRoleRepository  accountRoleRepository;
+    private final AccountRepository accountRepository;
+    private final AccountRoleRepository accountRoleRepository;
 
     //회원가입창
     @GetMapping("/sign-up")
@@ -37,24 +45,32 @@ public class AccountController {
         return "login/principal";
     }
 
-    //권한 수정 페이지
+    //권한편집 페이지
     @GetMapping("/principal-modify")
-    public String principalUpdatePage(Model model){
+    public String principalModify(@RequestParam(required = false) String searchText, Model model){
 
 
-        List<AccountRole> AllRoles = accountRoleRepository.findAll();
+        if (searchText != null) {
+            Account searchAccount = accountRepository.findByNickname(searchText);
+            model.addAttribute("auth", searchAccount.getRoles());
+        } else {
+            model.addAttribute("message", "아이디를 넣어주세요!");
+        }
 
 
-        String userRoles = accountRoleRepository.getRoles(4l).toString(); 
-        
+        model.addAttribute("allAuth", accountRoleRepository.findAll());
+        model.addAttribute("searchText", searchText);
 
-
-        model.addAttribute("AllRoles",AllRoles);
-        model.addAttribute("userRoles",userRoles);
-
-
-        return "admin/principalModify";
+        return "account/principal-modify";
     }
+
+    //권한 수정
+    @PostMapping("/principal-modify/{nickname}")
+    @ResponseBody
+    public Account principalUpdate( @RequestBody List<Long> authorities, @PathVariable String nickname){
+        return accountService.principalUpdate(authorities, nickname);
+    }
+
     
 }
 

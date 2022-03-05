@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,10 +10,18 @@
 <body>
     <h1>index</h1>
 
-    회원가입 : <a href="/account/sign-up">회원가입하러가기</a> <br/>
-    로그인 : <a href="/login">로그인하러가기</a> <br/>
+    <div sec:authorize="isAnonymous()">
+        회원가입 : <a href="/account/sign-up">회원가입하러가기</a> <br/>
+        로그인 : <a href="/login">로그인하러가기</a> <br/>
+    </div>
 
-        <a href="/account/principal" sec:isAuthenticated()>인증정보 확인</a>
+    <div sec:authorize="isAuthenticated()">
+        인증 : <a href="/account/principal" >인증정보 확인</a>
+        권한 : <a href="/account/principal-modify" >권한 편집</a>
+        <form th:action="@{/logout}" method="post" >
+            <button type="submit">로그아웃</button>
+        </form>
+    </div>
 
 </body>
 </html>

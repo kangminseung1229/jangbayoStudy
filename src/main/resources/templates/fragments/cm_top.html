@@ -1,12 +1,100 @@
-<header th:fragment="head(title)" class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-      <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
-    </a>
 
-    <ul class="nav nav-pills">
-      <li class="nav-item"><a href="/consult/consult-list" th:classappend="${title} == '상담' ? 'active' " class="nav-link" aria-current="page">상담</a></li>
-      <li class="nav-item"><a href="/list" th:classappend="${title} == '데이터' ? 'active' " class="nav-link">데이터</a></li>
-    </ul>
-</header>
+<head th:fragment="head(metaParam)">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+
+  <meta th:if="${metaParam =='csrf' }" name="_csrf" th:content="${_csrf.token}"/>
+  <meta th:if="${metaParam =='csrf' }" name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+  <title>jangbayo</title>
+
+  <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+  <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
+
+
+  <style>
+    .container {
+      max-width: 100%;
+    }
+
+    .tagify-outside {
+      border: 0;
+      padding: 0;
+      margin: 0;
+    }
+
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    }
+
+    body,
+    input,
+    button,
+    select,
+    optgroup,
+    textarea,
+    .tooltip,
+    .popover {
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    }
+
+    table th {
+      font-weight: lighter;
+    }
+
+    mark {
+      padding: 0;
+      background: transparent;
+      background: linear-gradient(to right, #f0ad4e 50%, transparent 50%);
+      background-position: right bottom;
+      background-size: 200% 100%;
+      transition: all .5s ease;
+      color: #fff;
+    }
+
+    mark.animate {
+      background-position: left bottom;
+      color: #000;
+    }
+
+    .jumbotron {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+      margin-bottom: 0;
+      background-color: #fff;
+    }
+
+    @media (min-width: 768px) {
+      .jumbotron {
+        padding-top: 6rem;
+        padding-bottom: 6rem;
+      }
+    }
+
+    .jumbotron p:last-child {
+      margin-bottom: 0;
+    }
+
+    .jumbotron h1 {
+      font-weight: 300;
+    }
+
+    .jumbotron .container {
+      max-width: 40rem;
+    }
+  </style>
+</head>
+
+
+
+
+
+</html>
