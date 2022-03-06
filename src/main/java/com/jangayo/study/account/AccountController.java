@@ -1,13 +1,15 @@
 package com.jangayo.study.account;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
+
+import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,17 +27,30 @@ public class AccountController {
     private final AccountService accountService;
     private final AccountRepository accountRepository;
     private final AccountRoleRepository accountRoleRepository;
+    private final SignUpFormValidator signUpFormValidator;
+
+    @InitBinder("signUpForm")
+    public void InitBinder(WebDataBinder webDataBinder) {
+        webDataBinder.addValidators(signUpFormValidator);
+    }
 
     //회원가입창
     @GetMapping("/sign-up")
-    public String signUpPage(){
+    public String signUpPage( Model model){
+        model.addAttribute("signUpForm", new SignUpForm());
         return "login/sign-up";
     }
 
     //회원가입처리
     @PostMapping("/sign-up")
-    public String signUp(SignUpForm signUpForm){
-        accountService.signUp(signUpForm);
+    public String signUp(@Valid SignUpForm signUpForm, Errors errors){
+
+
+        if (errors.hasErrors()) {
+            return "login/sign-up";
+        }
+
+        accountService.signUp(signUpForm);  
         return "redirect:/";
     }
 

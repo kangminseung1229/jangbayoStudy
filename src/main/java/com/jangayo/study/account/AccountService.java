@@ -45,7 +45,7 @@ public class AccountService implements UserDetailsService {
             roles.add(ROLE_USER);
 
             Account newAccount = Account.builder()
-                    .nickname(signUpForm.getUserid())
+                    .nickname(signUpForm.getNickname())
                     .password(passwordEncoder.encode(signUpForm.getPassword()))
                     .roles(roles)
                     .build();

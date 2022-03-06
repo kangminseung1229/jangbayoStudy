@@ -34,6 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         web.ignoring()
             .mvcMatchers("/css/**")
             .mvcMatchers("/node_modules/**")
+            .mvcMatchers("/img/**")
             .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
     
