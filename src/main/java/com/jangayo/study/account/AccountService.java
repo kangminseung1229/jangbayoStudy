@@ -58,13 +58,21 @@ public class AccountService implements UserDetailsService {
     // security DB connect
     @Override
     @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String idOrEmail) throws UsernameNotFoundException {
         // TODO Auto-generated method stub
 
-        Account account = accountRepository.findByNickname(username);
+        Account account = new Account();
+        
+        // nickname 또는 email 로 login
+
+        account = accountRepository.findByNickname(idOrEmail);
 
         if (account == null) {
-            throw new UsernameNotFoundException(username);
+            account = accountRepository.findByEmail(idOrEmail);
+        }
+
+        if (account == null) {
+            throw new UsernameNotFoundException(idOrEmail);
         }
 
         List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();

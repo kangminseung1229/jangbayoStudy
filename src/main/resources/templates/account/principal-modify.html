@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<head th:replace="fragments/cm_top.html :: head(metaParam='csrf') "></head>
+<head th:replace="fragments/cm_top.html :: head(metaParam='csrf',title='권한편집') "></head>
 
 <body>
+
+    <nav th:replace="fragments/cm_top.html :: main-nav(pagename='권한편집') "></nav>
 
     <div class="container">
 

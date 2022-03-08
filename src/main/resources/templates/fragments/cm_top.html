@@ -6,10 +6,10 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
 
-  <meta th:if="${metaParam =='csrf' }" name="_csrf" th:content="${_csrf.token}"/>
-  <meta th:if="${metaParam =='csrf' }" name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+  <meta th:if="${metaParam =='csrf' }" name="_csrf" th:content="${_csrf.token}" />
+  <meta th:if="${metaParam =='csrf' }" name="_csrf_header" th:content="${_csrf.headerName}" />
 
   <title th:text="${title}? '장바요 - ' + ${title} : '장바요' "> jangbayo</title>
 
@@ -22,6 +22,7 @@
   <style>
     .container {
       max-width: 100%;
+      margin: 15px;
     }
 
     .tagify-outside {
@@ -91,10 +92,45 @@
       max-width: 40rem;
     }
   </style>
+
+
+
+
 </head>
 
 
+<nav th:fragment="main-nav(pagename)" class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">[장바요]</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" th:classappend="${pagename == '권한편집'} ? 'active' : '' " aria-current="page" href="/account/principal-modify">권한편집</a>
+        </li>
+      </ul>
 
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false" sec:authentication="name">
+          Dropdown
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+          <form th:action="@{/logout}" method="post" sec:isAuthenticated()>
+            <li><button class="dropdown-item" type="submit">로그아웃</button></li>
+          </form>
+          <li><button class="dropdown-item" type="button">Another action</button></li>
+          <li><button class="dropdown-item" type="button">Something else here</button></li>
+        </ul>
+      </div>
+
+      
+      <span class="navbar-text">&nbsp; 환영합니다! </span>
+      
+    </div>
+  </div>
+</nav>
 
 
 </html>

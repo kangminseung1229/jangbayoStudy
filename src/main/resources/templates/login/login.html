@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<head th:replace="fragments/cm_top.html :: head(metaParam='csrf',title='login') "></head>
+<head th:replace="fragments/cm_top.html :: head(metaParam='',title='login') "></head>
 <style>
     html,
     body {
@@ -46,16 +46,16 @@
 
 <body class="text-center">
     <main class="form-signin">
-        <form>
+        <form th:action="@{/login}" method="post">
             <img class="mb-4" src="/img/jangbayo.png" alt="" width="72" height="57">
             <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
             <div class="form-floating">
-                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                <label for="floatingInput">Email address</label>
+                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" name="username">
+                <label for="floatingInput">ID or Email address</label>
             </div>
             <div class="form-floating">
-                <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password">
                 <label for="floatingPassword">Password</label>
             </div>
 

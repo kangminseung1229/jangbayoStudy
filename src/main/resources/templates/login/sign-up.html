@@ -23,7 +23,7 @@
         <h2>회원가입 양식</h2>
         <form th:action="@{/account/sign-up}" method="post" th:object="${signUpForm}">
             <div class="mb-3">
-                <label for="nickname" class="form-label">Email address</label>
+                <label for="nickname" class="form-label">ID :)</label>
                 <input type="text" class="form-control" th:field="*{nickname}"  aria-describedby="nicknameerror">
                 <small class="form-text text-danger" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}">Nickname Error</small>
             </div>
