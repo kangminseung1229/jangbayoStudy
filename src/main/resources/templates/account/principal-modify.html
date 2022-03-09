@@ -62,7 +62,7 @@
 
         <input type="hidden" id="nickname" th:value="${searchText}">
 
-        <button type="button" class="btn btn-success" onclick="result();">권한 수정하기</button>
+        <button type="button" class="btn btn-success" th:classappend="${auth} == null ? 'disabled' : '' " onclick="result();">권한 수정하기</button>
 
 
     </div>

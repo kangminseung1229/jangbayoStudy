@@ -67,7 +67,12 @@ public class AccountController {
 
         if (searchText != null) {
             Account searchAccount = accountRepository.findByNickname(searchText);
-            model.addAttribute("auth", searchAccount.getRoles());
+
+            if (searchAccount == null) {
+                model.addAttribute("message", "일치하는 아이디가 없습니다." );
+            } else{
+                model.addAttribute("auth", searchAccount.getRoles());
+            }
         } else {
             model.addAttribute("message", "아이디를 넣어주세요!");
         }

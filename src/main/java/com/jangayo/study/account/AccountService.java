@@ -47,6 +47,7 @@ public class AccountService implements UserDetailsService {
             Account newAccount = Account.builder()
                     .nickname(signUpForm.getNickname())
                     .password(passwordEncoder.encode(signUpForm.getPassword()))
+                    .email(signUpForm.getEmail())
                     .roles(roles)
                     .build();
 
@@ -92,7 +93,7 @@ public class AccountService implements UserDetailsService {
     }
 
     public Account principalUpdate(List<Long> authorities, String nickname) {
-        List<AccountRole> accountRoles = accountRoleRepository.findByIdIn(authorities);
+        List<AccountRole> accountRoles = accountRoleRepository.findByIdIn(authorities); 
         Account user = accountRepository.findByNickname(nickname);
         user.setRoles(accountRoles);
         return accountRepository.save(user);
