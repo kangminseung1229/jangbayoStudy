@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/account")
 @RequiredArgsConstructor
 public class AccountController {
+
 
     private final AccountService accountService;
     private final AccountRepository accountRepository;
@@ -90,6 +92,46 @@ public class AccountController {
     public Account principalUpdate( @RequestBody List<Long> authorities, @PathVariable String nickname){
         return accountService.principalUpdate(authorities, nickname);
     }
+
+    @GetMapping("/check-email-token")
+    public String checkEmailToken(@RequestParam String token, @RequestParam String email, Model model){
+
+        Account newAccount = accountRepository.findByEmail(email);
+
+        // 이메일 또는 토큰 불일치
+        if (newAccount == null || !newAccount.isValidToken(token)) {
+            model.addAttribute("error", "fail");
+        } else{
+            accountService.completeSignUp(newAccount);
+            model.addAttribute("nickname", newAccount.getNickname());
+            model.addAttribute("cnt", accountRepository.count());
+        }
+
+        return "account/check-email-success";
+
+    }
+
+    //이메일 재전송 페이지
+    @GetMapping("/check-email")
+    public String checkEmail(){
+        return "account/check-email";
+    }
+
+    // 이메일 재전송
+    @GetMapping("/check-email-resend")
+    public String checkEmailResend(@CurrentUser Account account, RedirectAttributes attributes){
+
+        if (!account.canSendConfirmEmail()) {
+            attributes.addFlashAttribute("mailResendMessage", "인증 메일은 1시간에 한 번씩 보낼 수 있습니다.");
+        } else{
+            accountService.mailMessage(account);
+            attributes.addFlashAttribute("mailResendMessage", "인증 메일을 재발송 했습니다!");
+        }
+        
+        return "redirect:/account/check-email";
+    }
+
+
 
     
 }

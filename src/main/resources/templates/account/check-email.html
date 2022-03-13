@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragments/cm_top.html :: head(metaParam='csrf',title='이메일') "></head>
+
+<body>
+    <nav th:replace="fragments/cm_top.html :: main-nav(pagename='이메일') "></nav>
+
+    <!-- contents area start-->
+        
+        <section class="py-5 text-center container">
+            <div class="row py-lg-5">
+              <div class="col-lg-6 col-md-8 mx-auto">
+                <h1 class="fw-light">인증 메일 재발송</h1>
+                <p class="lead text-muted">메일을 인증해야 사이트를 이용하실 수 있습니다.</p>
+    
+                <p sec:authorize="isAuthenticated()">
+                  <a href="/account/check-email-resend" class="btn btn-primary my-2">인증메일 재발송</a>
+                </p>
+
+                <div class="alert alert-warning" role="alert" th:if="${mailResendMessage}" th:text="${mailResendMessage}">
+                    이메일 제한사항.
+                </div>
+                
+
+              </div>
+            </div>
+          </section>
+    
+
+ 
+    <!-- contents area end -->
+
+
+</body>
+
+</html>

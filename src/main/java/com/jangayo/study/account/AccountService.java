@@ -1,10 +1,14 @@
 package com.jangayo.study.account;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import com.jangayo.study.mail.ConsoleMail;
+
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -26,6 +30,7 @@ public class AccountService implements UserDetailsService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
     private final AccountRoleRepository accountRoleRepository;
+    private final ConsoleMail consoleMail;
 
     // 회원가입 처리
     public void signUp(SignUpForm signUpForm) {
@@ -51,6 +56,9 @@ public class AccountService implements UserDetailsService {
                     .roles(roles)
                     .build();
 
+            newAccount.generateEmailCheckToken();
+            mailMessage(newAccount);
+
             accountRepository.save(newAccount);
         });
 
@@ -63,7 +71,7 @@ public class AccountService implements UserDetailsService {
         // TODO Auto-generated method stub
 
         Account account = new Account();
-        
+
         // nickname 또는 email 로 login
 
         account = accountRepository.findByNickname(idOrEmail);
@@ -93,11 +101,32 @@ public class AccountService implements UserDetailsService {
     }
 
     public Account principalUpdate(List<Long> authorities, String nickname) {
-        List<AccountRole> accountRoles = accountRoleRepository.findByIdIn(authorities); 
+        List<AccountRole> accountRoles = accountRoleRepository.findByIdIn(authorities);
         Account user = accountRepository.findByNickname(nickname);
         user.setRoles(accountRoles);
         return accountRepository.save(user);
     }
 
+    // 이메일 내용 작성
+    public void mailMessage(Account account) {
+
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+        mailMessage.setSubject("장바요 가입인증 메일");
+        mailMessage.setTo(account.getEmail());
+        mailMessage.setFrom("jangbayo@jangbayo.com");
+        mailMessage.setText(
+                "/account/check-email-token?token=" + account.getEmailCheckToken() + "&email=" + account.getEmail());
+        consoleMail.send(mailMessage);
+
+        account.setEmailCheckTokenGeneratedAt(LocalDateTime.now());
+        accountRepository.save(account);
+    }
+
+    // 메일 인증 성공
+    public void completeSignUp(Account account) {
+        account.completeSignUp();
+        login(account);
+    }
 
 }
