@@ -67,6 +67,7 @@ public class AccountController {
     public String principalModify(@RequestParam(required = false) String searchText, Model model){
 
 
+
         if (searchText != null) {
             Account searchAccount = accountRepository.findByNickname(searchText);
 
