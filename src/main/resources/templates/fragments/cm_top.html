@@ -13,12 +13,10 @@
 
   <title th:text="${title}? '장바요 - ' + ${title} : '장바요' "> jangbayo</title>
 
-  <script src="/node_modules/jquery/dist/jquery.min.js"></script>
-  <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
+  
   <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
 
-
+  
   <style>
     .container {
       max-width: 100%;
@@ -110,6 +108,12 @@
         <li class="nav-item">
           <a class="nav-link" th:classappend="${pagename == '권한편집'} ? 'active' : '' " aria-current="page" href="/account/principal-modify">권한편집</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" th:classappend="${pagename == '장바구니'} ? 'active' : '' " aria-current="page" href="/cart/cart-list">장바구니</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:classappend="${pagename == '상품목록'} ? 'active' : '' " aria-current="page" href="/cart/item-list">상품목록</a>
+        </li>
       </ul>
 
       <div class="dropdown">
@@ -134,3 +138,9 @@
 
 
 </html>
+
+
+<contentsEnd th:fragment="contentsEnd">
+  <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</contentsEnd>

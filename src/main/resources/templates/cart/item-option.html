@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragments/cm_top.html :: head(metaParam='csrf',title='상품목록') "></head>
+
+<body>
+
+    <nav th:replace="fragments/cm_top.html :: main-nav(pagename='상품목록') "></nav>
+
+    <div class="container">
+
+      <h1>제품명 : <span th:text="${item.name}"> 응아악 </span></h1>
+
+
+        <div class="list-group mx-0">
+          <label class="list-group-item d-flex gap-2" th:each=" row : ${ItemOptions}">
+            <input class="form-check-input flex-shrink-0" type="checkbox" th:value="${row.id}">
+            <span th:text="${row.name}">
+              First checkbox
+              <small class="d-block text-muted">옵션 설명</small>
+            </span>
+          </label>
+        </div>
+
+
+    </div>
+
+    <contentsEnd th:replace="fragments/cm_top.html :: contentsEnd"></contentsEnd>
+</body>
+
+</html>
