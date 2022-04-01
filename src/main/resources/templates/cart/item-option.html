@@ -19,6 +19,11 @@
               First checkbox
               <small class="d-block text-muted">옵션 설명</small>
             </span>
+            
+            <select th:name="'option' + ${row.id}">
+              <option th:each=" i : ${#numbers.sequence(1,10)}" th:text="${i}" >
+              </option>
+            </select>
           </label>
         </div>
 
