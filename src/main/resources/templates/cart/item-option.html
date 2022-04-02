@@ -11,26 +11,55 @@
 
       <h1>제품명 : <span th:text="${item.name}"> 응아악 </span></h1>
 
+        <label for="opton" class="form-label">옵션을 선택하세요.</label>
+        <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg" name="optionName" id="option">
+          <option th:each=" option : ${ItemOptions}" th:text="${option.name}" th:value="${option.id}">Open this select menu</option>
+        </select>
 
-        <div class="list-group mx-0">
-          <label class="list-group-item d-flex gap-2" th:each=" row : ${ItemOptions}">
-            <input class="form-check-input flex-shrink-0" type="checkbox" th:value="${row.id}">
-            <span th:text="${row.name}">
-              First checkbox
-              <small class="d-block text-muted">옵션 설명</small>
-            </span>
-            
-            <select th:name="'option' + ${row.id}">
-              <option th:each=" i : ${#numbers.sequence(1,10)}" th:text="${i}" >
-              </option>
-            </select>
-          </label>
+        <label for="cnt" class="form-label">수량을 선택하세요.</label>
+        <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg " name="optionCnt" id="cnt">
+          <option th:each=" i : ${#numbers.sequence(1,10)}" th:text="${i}" ></option>
+        </select>
+
+        
+
+
+        <div class="mt-4">
+          <button type="button" class="btn btn-primary" onclick="cart();">장바구니 담기</button>
+          <button type="button" class="btn btn-success">바로 구매하기</button>
         </div>
+
 
 
     </div>
 
     <contentsEnd th:replace="fragments/cm_top.html :: contentsEnd"></contentsEnd>
-</body>
 
+
+
+<script th:replace="fragments/cm_top.html :: csrfReady"></script>
+<script>
+
+  
+  function cart() {  
+
+    let optionId = $("#option").val();
+    let cnt = $("#cnt").val();
+
+    $.ajax({
+      type: "post",
+      url: "init-cart",
+      contentType: "application/json; charset=utf-8",
+      data: JSON.stringify({"optionId" : optionId, "cnt" : cnt}),
+      dataType: "json",
+      success: function (response) {
+        console.log(response);
+        
+      }
+    });
+  }
+  
+</script>
+
+</body>
 </html>

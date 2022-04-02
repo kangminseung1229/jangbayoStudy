@@ -6,6 +6,6 @@ import lombok.Data;
 public class OptionForm {
 
     private Long optionId;
-    private Long cnt;
+    private int cnt;
     
 }

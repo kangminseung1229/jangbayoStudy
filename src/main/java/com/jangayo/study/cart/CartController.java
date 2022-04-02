@@ -2,7 +2,6 @@ package com.jangayo.study.cart;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import com.jangayo.study.account.Account;
@@ -11,9 +10,8 @@ import com.jangayo.study.cart.entity.Item;
 import com.jangayo.study.cart.entity.ItemOption;
 import com.jangayo.study.cart.form.OptionForm;
 
-import org.apache.logging.log4j.message.ReusableMessage;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +30,7 @@ public class CartController {
 
     private final ItemRepository itemRepository;
     private final OptionRepository optionRepository;
+    private final CartService cartService;
 
 
     @GetMapping("/cart-list")
@@ -70,24 +69,12 @@ public class CartController {
     }
 
     //장바구니 담기 
-    @PostMapping("/init-cartitem")
+    @PostMapping("/init-cart")
     @ResponseBody
-    public void initCartitem(@RequestBody OptionForm optionForm){
-        System.out.println(optionForm);
+    public ResponseEntity initCartitem(@RequestBody OptionForm optionForm, @CurrentUser Account account){
+        cartService.initCartItem(account, optionForm);
+        return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/cart-test")
-    @ResponseBody
-    public HashMap<String, String>  test(@CurrentUser Account account){
-
-        HashMap<String, String> map = new HashMap<String, String>();
-        
-        
-        map.put("name", account.getNickname());
-        map.put("auth", SecurityContextHolder.getContext().getAuthentication().toString());
-
-        return map;
-
-    }
     
 }

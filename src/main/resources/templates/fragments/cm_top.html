@@ -13,10 +13,10 @@
 
   <title th:text="${title}? '장바요 - ' + ${title} : '장바요' "> jangbayo</title>
 
-  
+
   <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
 
-  
+
   <style>
     .container {
       max-width: 100%;
@@ -100,24 +100,29 @@
 <nav th:fragment="main-nav(pagename)" class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
     <a class="navbar-brand" href="/">[장바요]</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+      aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarText">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" th:classappend="${pagename == '권한편집'} ? 'active' : '' " aria-current="page" href="/account/principal-modify">권한편집</a>
+          <a class="nav-link" th:classappend="${pagename == '권한편집'} ? 'active' : '' " aria-current="page"
+            href="/account/principal-modify">권한편집</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" th:classappend="${pagename == '장바구니'} ? 'active' : '' " aria-current="page" href="/cart/cart-list">장바구니</a>
+          <a class="nav-link" th:classappend="${pagename == '장바구니'} ? 'active' : '' " aria-current="page"
+            href="/cart/cart-list">장바구니</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" th:classappend="${pagename == '상품목록'} ? 'active' : '' " aria-current="page" href="/cart/item-list">상품목록</a>
+          <a class="nav-link" th:classappend="${pagename == '상품목록'} ? 'active' : '' " aria-current="page"
+            href="/cart/item-list">상품목록</a>
         </li>
       </ul>
 
       <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false" sec:authentication="name">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown"
+          aria-expanded="false" sec:authentication="name">
           Dropdown
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
@@ -129,9 +134,9 @@
         </ul>
       </div>
 
-      
+
       <span class="navbar-text">&nbsp; 환영합니다! </span>
-      
+
     </div>
   </div>
 </nav>
@@ -144,3 +149,14 @@
   <script src="/node_modules/jquery/dist/jquery.min.js"></script>
   <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </contentsEnd>
+
+<script type="application/javascript" th:fragment="csrfReady">
+  $(function () {
+    var csrfToken = "[[${_csrf.token}]]";
+    var csrfHeader = "[[${_csrf.headerName}]]";
+    $(document).ajaxSend(function (e, xhr, options) {
+      console.log(csrfHeader);
+      xhr.setRequestHeader(csrfHeader, csrfToken);
+    });
+  });
+</script>

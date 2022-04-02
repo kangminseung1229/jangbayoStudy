@@ -34,7 +34,6 @@ public class CartItem {
     @OneToOne
     private ItemOption option;
 
-    @Length(min = 1, max = 100)
     private int cnt;
 
 

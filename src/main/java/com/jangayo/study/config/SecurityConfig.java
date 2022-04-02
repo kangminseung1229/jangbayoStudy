@@ -15,7 +15,7 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import lombok.RequiredArgsConstructor;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
