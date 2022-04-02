@@ -34,4 +34,4 @@ build/
 application.properties
 
 src/main/resources/static/node_modules
-src/main/resources/static/img
+src/main/resources/static/node
