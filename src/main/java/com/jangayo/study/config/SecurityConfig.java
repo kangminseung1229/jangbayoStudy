@@ -15,7 +15,7 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import lombok.RequiredArgsConstructor;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
@@ -28,7 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-            .mvcMatchers("/","/error", "/login","/account/sign-up","/account/check-email-token").permitAll()
+            .mvcMatchers("/","/error", "/login","/account/sign-up","/account/check-email-token", "/cart/cart-test").permitAll()
             .anyRequest().authenticated();
 
             
@@ -45,6 +45,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         http.rememberMe()
                 .userDetailsService(accountService)
                 .tokenRepository(tokenRepository());
+
+        http.httpBasic();
 
     }
 
