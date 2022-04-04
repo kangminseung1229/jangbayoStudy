@@ -10,6 +10,7 @@ public interface AccountRepository extends JpaRepository<Account, Long>{
 
     Boolean existsByEmail(String email);
     Boolean existsByNickname(String nickname);
+    void deleteByNickname(String string);
 
     // @Query(nativeQuery = true, 
     // value = "SELECT id, rolename FROM account_role")

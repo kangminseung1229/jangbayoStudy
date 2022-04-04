@@ -23,10 +23,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.RequiredArgsConstructor;
 
+import static com.jangayo.study.cart.CartController.CART;
+import static com.jangayo.study.cart.CartController.ROOT;
+
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/cart")
+@RequestMapping(ROOT + CART)
 public class CartController {
+
+    public static final String ROOT = "/";
+    public static final String CART = "cart";
+    
 
     private final ItemRepository itemRepository;
     private final OptionRepository optionRepository;
@@ -35,7 +42,7 @@ public class CartController {
 
     @GetMapping("/cart-list")
     public String cart(){
-        return "cart/cart-list";
+        return CART + "/cart-list";
     }
 
 
@@ -47,7 +54,7 @@ public class CartController {
 
         model.addAttribute(itemList);
 
-        return "cart/item-list";
+        return CART + "/item-list";
     }
 
     //상품에 대한 옵션 상세
@@ -65,7 +72,7 @@ public class CartController {
 
         model.addAttribute("ItemOptions", options);
         
-        return "cart/item-option";
+        return CART + "/item-option";
     }
 
     //장바구니 담기 
