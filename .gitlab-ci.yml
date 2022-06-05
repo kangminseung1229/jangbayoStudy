@@ -8,9 +8,8 @@ test-job :
         - kangminseung
     script : 
         - echo "이것은 테스트입니다."
-    on_cancle :
-        - echo "취소되었습니다."
-
+    
+    
 build-job:
     stage : build
     script : 
