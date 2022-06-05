@@ -4,7 +4,8 @@ stages :
 
 test-job :
     stage: test
-    only : kangminseung
+    only : 
+        - kangminseung
     script : 
         - echo "이것은 테스트입니다."
 
