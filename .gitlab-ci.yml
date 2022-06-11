@@ -3,8 +3,6 @@ stages :
 
 test-job :
     stage: test
-    only : 
-        - kangminseung
     script : 
         - echo "이것은 테스트입니다.6월11일"
     
