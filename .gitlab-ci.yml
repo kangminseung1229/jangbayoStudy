@@ -4,7 +4,7 @@ stages :
 test-job :
     stage: test
     script: 
-        - echo "이것은 테스트입니다.6월11일"
+        - ssh -o root@www.lionheart.pe.kr -p9114 'echo "hello world! " '
     tags:
         - msk
     
