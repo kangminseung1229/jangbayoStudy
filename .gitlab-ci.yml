@@ -4,7 +4,7 @@ stages :
 test-job :
     stage: test
     script: 
-        - ssh -o root@www.lionheart.pe.kr -p9114 'echo "hello world! " '
+        - ssh root@www.lionheart.pe.kr -p9114 'echo "hello world! " '
     tags:
         - msk
     
