@@ -5,6 +5,4 @@ test-job :
     stage: test
     script: 
         -  echo 'hello world!'
-    tags:
-        - msk
     
