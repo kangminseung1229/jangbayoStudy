@@ -4,5 +4,4 @@ stages :
 test-job :
     stage: test
     script: 
-        -  echo 'hello world!'
-    
+        -  ./app/build/jardeploy.sh law-api.jar
