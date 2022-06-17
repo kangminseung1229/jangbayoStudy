@@ -4,4 +4,4 @@ stages :
 test-job :
     stage: test
     script: 
-        -  ./app/build/jardeploy.sh law-api.jar
+        -  /app/build/./jardeploy.sh law-api.jar
